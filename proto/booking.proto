@@ -1,0 +1,31 @@
+syntax = 'proto3';
+
+package booking;
+
+service BookingService {
+    rpc ReserveSeat (ReserveSeatRequest) returns (ReserveSeatResponse);
+    rpc ConfirmBooking (ConfirmBookingRequest) returns (ConfirmBookingResponse);
+}
+
+message ReserveSeatRequest {
+   string event_id = 1;
+   string seat_id = 2;
+   string user_id = 3;
+}
+
+message ReserveSeatResponse {
+   bool success = 1;
+   string reservation_id = 2;
+   string expires_at = 3;
+}
+
+message ConfirmBookingRequest {
+   string reservation_id = 1;
+   string payment_id = 2;
+}
+
+message ConfirmBookingResponse {
+   string order_id = 1;
+   string status = 2;
+}
+

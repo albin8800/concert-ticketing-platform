@@ -1,0 +1,57 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  firstName    String
+  lastName     String?
+  phoneNumber  String
+  dateOfBirth  DateTime
+  orders       Order[]
+}
+
+model Event {
+  id            String   @id @default(uuid())
+  name          String
+  date          DateTime
+  totalCapacity Int
+  tickets       Ticket[]
+}
+
+model Ticket {
+  id         String  @id @default(uuid())
+  eventId    String
+  event      Event   @relation(fields: [eventId], references: [id])
+  seatNumber String
+  status     String // AVAILABLE, RESERVED, SOLD
+  price      Decimal
+  order      Order?
+}
+
+model Order {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  ticketId    String   @unique
+  ticket      Ticket   @relation(fields: [ticketId], references: [id])
+  totalAmount Decimal
+  status      String // PENDING, COMPLETED, CANCELLED
+  createdAt   DateTime @default(now())
+}
+
+model OutboxEvent {
+  id            String   @id @default(uuid())
+  aggregateType String // e.g., "ORDER"
+  aggregateId   String
+  payload       Json
+  processed     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+}
