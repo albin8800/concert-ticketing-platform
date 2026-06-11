@@ -1,7 +1,7 @@
 import { Controller, Logger, Inject } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { GrpcMethod } from '@nestjs/microservices';
-import { RegisterDto, LoginDto } from 'common';
+import { RegisterDto, LoginDto, RefreshDto } from 'common';
 
 
 @Controller()
@@ -22,5 +22,23 @@ export class AppController {
   login(data: LoginDto) {
     this.logger.log('Logging in user: ' + data.email);
     return this.authService.login(data);
+  }
+
+  @GrpcMethod('AuthService', 'Refresh')
+  refresh(data: RefreshDto) {
+    this.logger.log('Refreshing token');
+    return this.authService.refresh(data);
+  }
+
+  @GrpcMethod('AuthService', 'Logout')
+  logout(data: RefreshDto) {
+    this.logger.log('Logging out');
+    return this.authService.logout(data);
+  }
+
+  @GrpcMethod('AuthService', 'ValidateToken')
+  validateToken(data: { token: string }) {
+    this.logger.log('Validating token');
+    return this.authService.validateToken(data);
   }
 }

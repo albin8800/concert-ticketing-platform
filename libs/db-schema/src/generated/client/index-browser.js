@@ -130,6 +130,15 @@ exports.Prisma.UserScalarFieldEnum = {
   dateOfBirth: 'dateOfBirth'
 };
 
+exports.Prisma.RefreshTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  expiresAt: 'expiresAt',
+  revoked: 'revoked',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.EventScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -191,6 +200,7 @@ exports.Prisma.JsonNullValueFilter = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  RefreshToken: 'RefreshToken',
   Event: 'Event',
   Ticket: 'Ticket',
   Order: 'Order',

@@ -1,11 +1,14 @@
 import { Body, Controller, Inject, OnModuleInit, Post } from "@nestjs/common";
 import { ClientGrpc } from "@nestjs/microservices";
-import { LoginDto, RegisterDto } from "common";
+import { LoginDto, RefreshDto, RegisterDto } from "common";
 
 
 interface AuthServiceClient {
     register(data: RegisterDto): any;
     login(data: LoginDto) : any;
+    refresh(data: RefreshDto) : any;
+    logout(data: RefreshDto) : any;
+    validateToken(data: { token: string }): any;
 }
 
 @Controller('auth')
@@ -26,6 +29,16 @@ export class AuthController implements OnModuleInit {
     @Post('login')
     login(@Body() data: LoginDto) {
         return this.authService.login(data);
+    }
+
+    @Post('refresh')
+    refresh(@Body() data: RefreshDto) {
+        return this.authService.refresh(data);
+    }
+
+    @Post('logout')
+    logout(@Body() data: RefreshDto) {
+        return this.authService.logout(data);
     }
 
 }

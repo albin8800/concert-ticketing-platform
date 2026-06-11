@@ -1,6 +1,6 @@
-import { Controller, Get, Inject } from '@nestjs/common';
-
+import { Controller, Get, Inject, UseGuards, Request } from '@nestjs/common';
 import { AppService } from './app.service';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @Controller()
 export class AppController {
@@ -9,5 +9,11 @@ export class AppController {
   @Get()
   getData() {
     return this.appService.getData();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }

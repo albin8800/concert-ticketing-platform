@@ -1,4 +1,4 @@
-import { IsEmail, IsISO8601, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsISO8601, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class RegisterDto {
     @IsEmail({}, { message: 'Invalid email address' })
@@ -12,7 +12,8 @@ export class RegisterDto {
     firstName!: string;
 
     @IsString()
-    lastName!: string;
+    @IsOptional()
+    lastName?: string;
 
     @IsString()
     phoneNumber!: string;
@@ -23,14 +24,28 @@ export class RegisterDto {
 
 export class LoginDto {
     @IsEmail()
+    @IsNotEmpty()
     email!: string;
 
     @IsString()
+    @IsNotEmpty()
     password!: string;
 
 }
 
 export class GenerateTokenDto {
     @IsString()
+    userId!: string;
+}
+
+export class RefreshDto {
+    @IsString()
+    @IsNotEmpty()
+    refreshToken!: string;
+}
+
+export class CreateRefreshTokenDto {
+    @IsString()
+    @IsNotEmpty()
     userId!: string;
 }
