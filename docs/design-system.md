@@ -1,58 +1,29 @@
-# Design System: Concert Ticketing Platform (Frontend)
+# Design System: Lumina
 
-This document defines the design tokens and UI standards for the Concert Ticketing Platform frontend. Adhering to these guidelines ensures a consistent, high-quality, and modern user experience.
+## 1. Core Philosophy
+**Ultra-Minimalist & Uncluttered**. We prioritize content over decoration. No unnecessary gradients, no background noise, no complex split-screens. Just clean, centered content with massive amounts of breathing room.
 
-## Theme Overview
-*   **Aesthetic:** Modern, clean, and high-tech with a focus on vibrant interactive elements.
-*   **Primary Accent:** Emerald Green. Represents growth, success, and trust.
-*   **Theme Mode:** System default (Adaptive Light/Dark mode).
+## 2. Colors
+- **Primary Accent**: Blue (`blue-600` / `#2563eb`). A highly trusted, vibrant color perfect for booking platforms, signifying security and action.
+- **Background**: Very light gray (`zinc-50`).
+- **Surface (Cards)**: Pure White (`white`) with extremely subtle borders, no heavy shadows.
+- **Text (Primary)**: `zinc-900` for headings.
+- **Text (Secondary)**: `zinc-500` for labels and subtle text.
 
-## 1. Color Palette
-
-### 1.1 Core Colors
-| Token | Light Mode (CSS Variable) | Dark Mode (CSS Variable) | Usage |
-| :--- | :--- | :--- | :--- |
-| **Primary** | `emerald-600` | `emerald-500` | Main actions, highlights, brand color. |
-| **Primary Foreground** | White | Zinc-950 | Text on primary backgrounds. |
-| **Background** | White | Zinc-950 | Page background. |
-| **Foreground** | Zinc-950 | Zinc-50 | Main text color. |
-
-### 1.2 Neutral & Semantic Colors
-| Token | Description |
-| :--- | :--- |
-| **Muted** | Low-contrast text and backgrounds for subtle elements. |
-| **Accent** | Subtle hover states and highlight backgrounds. |
-| **Border** | Subtle borders for inputs and cards. |
-| **Destructive** | Red tones for errors and dangerous actions. |
-| **Input** | Background color for form inputs. |
-
-## 2. Typography
-*   **Font Family:** Inter (Sans-serif). A highly legible font designed for screen interfaces.
-*   **Heading Scale:**
-    *   `h1`: 30px (Bold)
-    *   `h2`: 24px (Semi-bold)
-    *   `h3`: 20px (Semi-bold)
-*   **Body Scale:**
-    *   `base`: 16px (Regular)
-    *   `sm`: 14px (Regular)
-
-## 3. UI Components (Production Standards)
+## 3. UI Components
 
 ### 3.1 Buttons
-*   **Rounded:** Medium (`md`) border radius.
-*   **Elevation:** Subtle shadows on primary actions; flat for secondary/ghost.
-*   **Interaction:** 150ms transition for hover and active states.
+- **Shape**: Slight rounding (`rounded-md`).
+- **Width**: Natural width (`w-auto`) unless specifically requested. Usually centered or left-aligned.
+- **Padding**: `px-6 py-2`.
+- **Height**: Standard `h-10`.
 
-### 3.2 Forms & Inputs
-*   **Focus Ring:** 2px solid emerald ring with offset.
-*   **Error State:** Red border with assistive text below the field.
-*   **Layout:** Label-above-input by default for better scanability on mobile.
+### 3.2 Inputs
+- **Style**: Minimal. `border-zinc-200`, `rounded-md`.
+- **Focus**: `focus:ring-1 focus:ring-blue-600 focus:border-blue-600`.
+- **Labels**: Small (`text-sm`), muted (`text-zinc-500`), placed directly above the input.
 
-### 3.3 Cards
-*   **Style:** Minimalist borders with very subtle shadows (`sm`).
-*   **Padding:** Standardized 24px (`p-6`) for form containers.
-
-## 4. Auth UI Layout (Modern Split-Screen)
-For the authentication flow, we use a split-screen design:
-1.  **Brand Side:** A gradient background using the Emerald palette, featuring the platform logo and a value proposition statement.
-2.  **Form Side:** A clean, white/dark-zinc area where the login/register forms are centered. This reduces cognitive load and keeps the user focused on the task.
+## 4. Auth Layout
+- **Structure**: A single, clean, centered card on a `zinc-50` background.
+- **Logo**: Small and centered above the card.
+- **No distractions**: Removed all split-screen imagery, complex marketing copy, and background blobs.

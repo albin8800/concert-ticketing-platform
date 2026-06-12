@@ -55,6 +55,8 @@ export interface AuthServiceClient {
   validateToken(request: ValidateRequest): Observable<ValidateResponse>;
 
   refresh(request: RefreshRequest): Observable<AuthResponse>;
+
+  logout(request: RefreshRequest): Observable<AuthResponse>;
 }
 
 export interface AuthServiceController {
@@ -65,11 +67,13 @@ export interface AuthServiceController {
   validateToken(request: ValidateRequest): Promise<ValidateResponse> | Observable<ValidateResponse> | ValidateResponse;
 
   refresh(request: RefreshRequest): Promise<AuthResponse> | Observable<AuthResponse> | AuthResponse;
+
+  logout(request: RefreshRequest): Promise<AuthResponse> | Observable<AuthResponse> | AuthResponse;
 }
 
 export function AuthServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["register", "login", "validateToken", "refresh"];
+    const grpcMethods: string[] = ["register", "login", "validateToken", "refresh", "logout"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("AuthService", method)(constructor.prototype[method], method, descriptor);
