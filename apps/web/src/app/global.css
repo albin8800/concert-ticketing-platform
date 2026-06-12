@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* White */
+    --foreground: 240 5% 10%; /* Zinc-950 */
+    --card: 0 0% 100%;
+    --card-foreground: 240 5% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 5% 10%;
+    --primary: 145 63% 40%; /* emerald-600 */
+    --primary-foreground: 0 0% 100%; /* White */
+    --secondary: 240 5% 95%; /* zinc-50 */
+    --secondary-foreground: 240 5% 10%; /* zinc-950 */
+    --muted: 240 5% 95%; /* zinc-50 */
+    --muted-foreground: 240 4% 46%; /* zinc-500 */
+    --accent: 240 5% 95%; /* zinc-50 */
+    --accent-foreground: 240 5% 10%; /* zinc-950 */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%; /* zinc-200 */
+    --input: 240 5% 93%; /* zinc-100 */
+    --ring: 145 63% 40%; /* emerald-600 */
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 5% 10%; /* Zinc-950 */
+    --foreground: 240 5% 95%; /* Zinc-50 */
+    --card: 240 5% 10%;
+    --card-foreground: 240 5% 95%;
+    --popover: 240 5% 10%;
+    --popover-foreground: 240 5% 95%;
+    --primary: 142 71% 45%; /* emerald-500 */
+    --primary-foreground: 240 5% 10%; /* Zinc-950 */
+    --secondary: 240 5% 14%; /* zinc-900 */
+    --secondary-foreground: 240 5% 95%; /* zinc-50 */
+    --muted: 240 5% 14%; /* zinc-900 */
+    --muted-foreground: 240 5% 65%; /* zinc-400 */
+    --accent: 240 5% 14%; /* zinc-900 */
+    --accent-foreground: 240 5% 95%; /* zinc-50 */
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 5% 26%; /* zinc-800 */
+    --input: 240 5% 26%; /* zinc-800 */
+    --ring: 142 71% 45%; /* emerald-500 */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Fix for Tailwind hiding the native date picker icon */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.2s;
+  }
+  
+  input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+  }
+
+  /* Fix for browser autofill turning inputs gray/yellow */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 30px hsl(var(--background)) inset !important;
+      -webkit-text-fill-color: hsl(var(--foreground)) !important;
+      caret-color: hsl(var(--foreground)) !important;
+  }
+}
