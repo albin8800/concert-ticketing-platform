@@ -94,7 +94,7 @@ export default function RegisterPage() {
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="lastName" className="text-zinc-500 font-normal">Last name</Label>
+            <Label htmlFor="lastName" className="text-zinc-500 font-normal">Last name (optional)</Label>
             <Input 
               id="lastName" 
               value={formData.lastName}
