@@ -11,8 +11,10 @@
     "build:web": "nx build web",
     "db:migrate": "npx prisma migrate dev --schema=libs/db-schema/prisma/schema.prisma",
     "db:generate": "npx prisma generate --schema=libs/db-schema/prisma/schema.prisma",
+    "db:seed:admin": "npx tsx libs/db-schema/prisma/seed.ts",
     "proto:generate": "node scripts/generate-proto.mjs"
   },
+
   "dependencies": {
     "@grpc/grpc-js": "1.14.4",
     "@grpc/proto-loader": "0.8.1",

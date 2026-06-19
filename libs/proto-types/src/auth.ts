@@ -39,6 +39,7 @@ export interface ValidateRequest {
 export interface ValidateResponse {
   valid: boolean;
   userId: string;
+  role: string;
 }
 
 export interface RefreshRequest {

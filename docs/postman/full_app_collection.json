@@ -38,7 +38,34 @@
 					"response": []
 				},
 				{
-					"name": "Login",
+					"name": "Register Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@luminatickets.com\",\n    \"password\": \"SecurePassword123!\",\n    \"firstName\": \"Admin\",\n    \"lastName\": \"User\",\n    \"phoneNumber\": \"555-0100\",\n    \"dateOfBirth\": \"1990-01-01T00:00:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
 					"event": [
 						{
 							"listen": "test",
@@ -82,7 +109,7 @@
 					"response": []
 				},
 				{
-					"name": "Refresh Token",
+					"name": "Login Admin",
 					"event": [
 						{
 							"listen": "test",
@@ -90,10 +117,7 @@
 								"exec": [
 									"var jsonData = pm.response.json();",
 									"if (jsonData.accessToken) {",
-									"    pm.collectionVariables.set(\"accessToken\", jsonData.accessToken);",
-									"}",
-									"if (jsonData.refreshToken) {",
-									"    pm.collectionVariables.set(\"refreshToken\", jsonData.refreshToken);",
+									"    pm.collectionVariables.set(\"adminAccessToken\", jsonData.accessToken);",
 									"}"
 								],
 								"type": "text/javascript"
@@ -105,7 +129,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}",
+							"raw": "{\n    \"email\": \"admin@luminatickets.com\",\n    \"password\": \"admin@123!\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -113,40 +137,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/auth/refresh",
+							"raw": "{{baseUrl}}/auth/login",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"auth",
-								"refresh"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Logout",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/logout",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"logout"
+								"login"
 							]
 						}
 					},
@@ -155,51 +152,58 @@
 			]
 		},
 		{
-			"name": "02. User Service",
+			"name": "02. Events (Booking Service)",
 			"item": [
 				{
-					"name": "Get Profile",
+					"name": "Create Event (Admin)",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{accessToken}}",
+									"value": "{{adminAccessToken}}",
 									"type": "string"
 								}
 							]
 						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"The Lumina Tour 2026\",\n  \"date\": \"2026-10-24T20:00:00Z\",\n  \"totalCapacity\": 100,\n  \"basePrice\": 65.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/profile",
+							"raw": "{{baseUrl}}/booking/admin/events",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"profile"
+								"booking",
+								"admin",
+								"events"
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "03. Events (Planned)",
-			"item": [
+				},
 				{
 					"name": "List Events",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/events",
+							"raw": "{{baseUrl}}/booking/events",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
+								"booking",
 								"events"
 							]
 						}
@@ -212,18 +216,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/events/:id",
+							"raw": "{{baseUrl}}/booking/events/:id",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
+								"booking",
 								"events",
 								":id"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": "uuid-here"
+									"value": "INSERT_EVENT_ID_HERE"
 								}
 							]
 						}
@@ -233,10 +238,10 @@
 			]
 		},
 		{
-			"name": "04. Booking (Planned)",
+			"name": "03. Booking (Transactions)",
 			"item": [
 				{
-					"name": "Create Order",
+					"name": "Reserve Seat (Hold)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -252,7 +257,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"ticketId\": \"uuid-here\",\n    \"totalAmount\": 150.00\n}",
+							"raw": "{\n    \"ticketId\": \"INSERT_TICKET_ID_HERE\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -260,19 +265,28 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/orders",
+							"raw": "{{baseUrl}}/booking/events/:id/reserve",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"orders"
+								"booking",
+								"events",
+								":id",
+								"reserve"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "INSERT_EVENT_ID_HERE"
+								}
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Order Status",
+					"name": "Confirm Booking (Checkout)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -284,22 +298,25 @@
 								}
 							]
 						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reservationId\": \"INSERT_TICKET_ID_HERE\",\n    \"paymentId\": \"pi_12345_mock_payment\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/orders/:id",
+							"raw": "{{baseUrl}}/booking/checkout",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"orders",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "uuid-here"
-								}
+								"booking",
+								"checkout"
 							]
 						}
 					},
@@ -316,6 +333,10 @@
 		},
 		{
 			"key": "accessToken",
+			"value": ""
+		},
+		{
+			"key": "adminAccessToken",
 			"value": ""
 		},
 		{

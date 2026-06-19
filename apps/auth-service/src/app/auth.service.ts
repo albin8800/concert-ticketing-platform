@@ -43,7 +43,7 @@ export class AuthService {
   async login(data:LoginDto) {
     const user = await this.prisma.user.findUnique({ where: { email: data.email }});
     if(user && await bcrypt.compare(data.password, user.passwordHash)) {
-      const accessToken = this.generateToken({ userId: user.id });
+      const accessToken = this.generateToken({ userId: user.id, role: user.role });
       const refreshToken = await this.createRefreshToken({ userId: user.id });
 
       return {
@@ -58,7 +58,7 @@ export class AuthService {
 
   // Generate JWT access token
   private generateToken(data: GenerateTokenDto) {
-    return this.jwtService.sign({ sub: data.userId });
+    return this.jwtService.sign({ sub: data.userId, role:data.role });
   }
 
   // Refresh access token using refresh token
@@ -78,7 +78,7 @@ export class AuthService {
       data: { revoked: true }
     });
 
-    const accessToken = this.generateToken({ userId: storedToken.userId });
+    const accessToken = this.generateToken({ userId: storedToken.userId, role: storedToken.user.role });
     const newRefreshToken = await this.createRefreshToken({ userId: storedToken.userId });
 
     return {
@@ -107,11 +107,11 @@ export class AuthService {
       const payload = this.jwtService.verify(data.token);
       const user = await this.prisma.user.findUnique({ where: { id: payload.sub } });
       if (!user) {
-        return { valid: false, userId: '' };
+        return { valid: false, userId: '', role: '' };
       }
-      return { valid: true, userId: payload.sub };
+      return { valid: true, userId: payload.sub, role: user.role };
     } catch (error) {
-      return { valid: false, userId: '' };
+      return { valid: false, userId: '', role: '' };
     }
   }
 

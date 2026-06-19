@@ -36,6 +36,10 @@ export class LoginDto {
 export class GenerateTokenDto {
     @IsString()
     userId!: string;
+
+    @IsString()
+    @IsNotEmpty()
+    role!: string;
 }
 
 export class RefreshDto {

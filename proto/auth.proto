@@ -39,6 +39,7 @@ message ValidateRequest {
 message ValidateResponse {
     bool valid = 1;
     string userId = 2;
+    string role = 3;
 }
 
 message RefreshRequest {

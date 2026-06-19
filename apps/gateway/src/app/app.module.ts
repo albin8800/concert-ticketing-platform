@@ -5,6 +5,7 @@
  import { JwtAuthGuard } from './auth/jwt-auth.guard';
  import { AppService } from './app.service';
  import { AppController } from './app.controller';
+ import { BookingController } from './booking/booking.controller';
 
  @Module({
    imports: [
@@ -19,9 +20,19 @@
              loader: { keepCase: true }
            },
          },
+         {
+          name: 'BOOKING_PACKAGE',
+          transport: Transport.GRPC,
+          options: {
+            package: 'booking',
+            protoPath: join(__dirname, '../../../../proto/booking.proto'),
+            url: 'localhost:3001',
+            loader: { keepCase: true }
+          }
+         }
        ]),
      ],
-     controllers: [AuthController, AppController],
+     controllers: [AuthController, BookingController, AppController],
      providers: [AppService, JwtAuthGuard],
    })
    export class AppModule {}

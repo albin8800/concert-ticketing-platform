@@ -10,9 +10,61 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "booking";
 
+/** ----- Generic ----- */
+export interface Empty {
+}
+
+/** ----- Admin: Create Event ----- */
+export interface CreateEventRequest {
+  name: string;
+  /** ISO 8601 string */
+  date: string;
+  totalCapacity: number;
+  basePrice: number;
+}
+
+export interface CreateEventResponse {
+  eventId: string;
+  message: string;
+}
+
+/** ----- Public: Fetch Events ----- */
+export interface EventSummary {
+  id: string;
+  name: string;
+  date: string;
+  availableTickets: number;
+}
+
+export interface GetEventsResponse {
+  events: EventSummary[];
+}
+
+/** ----- Public: Event Details & Seats ----- */
+export interface SeatDTO {
+  id: string;
+  seatNumber: string;
+  /** AVAILABLE, RESERVED, SOLD */
+  status: string;
+  price: number;
+}
+
+export interface GetEventDetailsRequest {
+  eventId: string;
+}
+
+export interface GetEventDetailsResponse {
+  id: string;
+  name: string;
+  date: string;
+  seats: SeatDTO[];
+}
+
+/** ----- Transactions: Reservations & Booking ----- */
 export interface ReserveSeatRequest {
   eventId: string;
-  seatId: string;
+  /** Changed from seat_id to align with DB schema */
+  ticketId: string;
   userId: string;
 }
 
@@ -20,27 +72,59 @@ export interface ReserveSeatResponse {
   success: boolean;
   reservationId: string;
   expiresAt: string;
+  message: string;
 }
 
 export interface ConfirmBookingRequest {
   reservationId: string;
   paymentId: string;
+  userId: string;
 }
 
 export interface ConfirmBookingResponse {
+  success: boolean;
   orderId: string;
   status: string;
+  message: string;
 }
 
 export const BOOKING_PACKAGE_NAME = "booking";
 
 export interface BookingServiceClient {
+  /** Admin Endpoints */
+
+  createEvent(request: CreateEventRequest): Observable<CreateEventResponse>;
+
+  /** Public Endpoints */
+
+  getEvents(request: Empty): Observable<GetEventsResponse>;
+
+  getEventDetails(request: GetEventDetailsRequest): Observable<GetEventDetailsResponse>;
+
+  /** Transactional Endpoints */
+
   reserveSeat(request: ReserveSeatRequest): Observable<ReserveSeatResponse>;
 
   confirmBooking(request: ConfirmBookingRequest): Observable<ConfirmBookingResponse>;
 }
 
 export interface BookingServiceController {
+  /** Admin Endpoints */
+
+  createEvent(
+    request: CreateEventRequest,
+  ): Promise<CreateEventResponse> | Observable<CreateEventResponse> | CreateEventResponse;
+
+  /** Public Endpoints */
+
+  getEvents(request: Empty): Promise<GetEventsResponse> | Observable<GetEventsResponse> | GetEventsResponse;
+
+  getEventDetails(
+    request: GetEventDetailsRequest,
+  ): Promise<GetEventDetailsResponse> | Observable<GetEventDetailsResponse> | GetEventDetailsResponse;
+
+  /** Transactional Endpoints */
+
   reserveSeat(
     request: ReserveSeatRequest,
   ): Promise<ReserveSeatResponse> | Observable<ReserveSeatResponse> | ReserveSeatResponse;
@@ -52,7 +136,7 @@ export interface BookingServiceController {
 
 export function BookingServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["reserveSeat", "confirmBooking"];
+    const grpcMethods: string[] = ["createEvent", "getEvents", "getEventDetails", "reserveSeat", "confirmBooking"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("BookingService", method)(constructor.prototype[method], method, descriptor);

@@ -3,29 +3,88 @@ syntax = 'proto3';
 package booking;
 
 service BookingService {
-    rpc ReserveSeat (ReserveSeatRequest) returns (ReserveSeatResponse);
-    rpc ConfirmBooking (ConfirmBookingRequest) returns (ConfirmBookingResponse);
+   // Admin Endpoints
+   rpc CreateEvent (CreateEventRequest) returns (CreateEventResponse);
+
+   // Public Endpoints
+   rpc GetEvents (Empty) returns (GetEventsResponse);
+   rpc GetEventDetails (GetEventDetailsRequest) returns (GetEventDetailsResponse);
+
+   // Transactional Endpoints
+   rpc ReserveSeat (ReserveSeatRequest) returns (ReserveSeatResponse);
+   rpc ConfirmBooking (ConfirmBookingRequest) returns (ConfirmBookingResponse);
 }
 
+// ----- Generic -----
+message Empty {}
+
+// ----- Admin: Create Event -----
+message CreateEventRequest {
+   string name = 1;
+   string date = 2; // ISO 8601 string
+   int32 totalCapacity = 3;
+   double basePrice = 4;
+}
+
+message CreateEventResponse {
+   string eventId = 1;
+   string message = 2;
+}
+
+// ----- Public: Fetch Events -----
+message EventSummary {
+   string id = 1;
+   string name = 2;
+   string date = 3;
+   int32 availableTickets = 4;
+}
+
+message GetEventsResponse {
+   repeated EventSummary events = 1;
+}
+
+// ----- Public: Event Details & Seats -----
+message SeatDTO {
+   string id = 1;
+   string seatNumber = 2;
+   string status = 3; // AVAILABLE, RESERVED, SOLD
+   double price = 4;
+}
+
+message GetEventDetailsRequest {
+   string eventId = 1;
+}
+
+message GetEventDetailsResponse {
+   string id = 1;
+   string name = 2;
+   string date = 3;
+   repeated SeatDTO seats = 4;
+}
+
+// ----- Transactions: Reservations & Booking -----
 message ReserveSeatRequest {
-   string event_id = 1;
-   string seat_id = 2;
-   string user_id = 3;
+   string eventId = 1;
+   string ticketId = 2; // Changed from seat_id to align with DB schema
+   string userId = 3;
 }
 
 message ReserveSeatResponse {
    bool success = 1;
-   string reservation_id = 2;
-   string expires_at = 3;
+   string reservationId = 2;
+   string expiresAt = 3;
+   string message = 4;
 }
 
 message ConfirmBookingRequest {
-   string reservation_id = 1;
-   string payment_id = 2;
+   string reservationId = 1;
+   string paymentId = 2;
+   string userId = 3;
 }
 
 message ConfirmBookingResponse {
-   string order_id = 1;
-   string status = 2;
+   bool success = 1;
+   string orderId = 2;
+   string status = 3;
+   string message = 4;
 }
-
