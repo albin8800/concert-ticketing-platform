@@ -19,6 +19,10 @@ export class AppService {
         name: data.name,
         date: new Date(data.date),
         totalCapacity: data.totalCapacity,
+        artist: data.artist,
+        description: data.description,
+        venue: data.venue,
+        image: data.image,
 
         tickets: {
           create: Array.from({ length: data.totalCapacity }).map((_, i) => ({
@@ -43,6 +47,10 @@ export class AppService {
         name: e.name,
         date: e.date.toISOString(),
         availableTickets: e._count.tickets,
+        artist: e.artist,
+        venue: e.venue,
+        image: e.image,
+        totalCapacity: e.totalCapacity,
       }))
     };
   }

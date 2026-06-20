@@ -3649,6 +3649,10 @@ export namespace Prisma {
   export type EventMinAggregateOutputType = {
     id: string | null
     name: string | null
+    artist: string | null
+    description: string | null
+    venue: string | null
+    image: string | null
     date: Date | null
     totalCapacity: number | null
   }
@@ -3656,6 +3660,10 @@ export namespace Prisma {
   export type EventMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    artist: string | null
+    description: string | null
+    venue: string | null
+    image: string | null
     date: Date | null
     totalCapacity: number | null
   }
@@ -3663,6 +3671,10 @@ export namespace Prisma {
   export type EventCountAggregateOutputType = {
     id: number
     name: number
+    artist: number
+    description: number
+    venue: number
+    image: number
     date: number
     totalCapacity: number
     _all: number
@@ -3680,6 +3692,10 @@ export namespace Prisma {
   export type EventMinAggregateInputType = {
     id?: true
     name?: true
+    artist?: true
+    description?: true
+    venue?: true
+    image?: true
     date?: true
     totalCapacity?: true
   }
@@ -3687,6 +3703,10 @@ export namespace Prisma {
   export type EventMaxAggregateInputType = {
     id?: true
     name?: true
+    artist?: true
+    description?: true
+    venue?: true
+    image?: true
     date?: true
     totalCapacity?: true
   }
@@ -3694,6 +3714,10 @@ export namespace Prisma {
   export type EventCountAggregateInputType = {
     id?: true
     name?: true
+    artist?: true
+    description?: true
+    venue?: true
+    image?: true
     date?: true
     totalCapacity?: true
     _all?: true
@@ -3788,6 +3812,10 @@ export namespace Prisma {
   export type EventGroupByOutputType = {
     id: string
     name: string
+    artist: string | null
+    description: string | null
+    venue: string | null
+    image: string | null
     date: Date
     totalCapacity: number
     _count: EventCountAggregateOutputType | null
@@ -3814,6 +3842,10 @@ export namespace Prisma {
   export type EventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    artist?: boolean
+    description?: boolean
+    venue?: boolean
+    image?: boolean
     date?: boolean
     totalCapacity?: boolean
     tickets?: boolean | Event$ticketsArgs<ExtArgs>
@@ -3823,6 +3855,10 @@ export namespace Prisma {
   export type EventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    artist?: boolean
+    description?: boolean
+    venue?: boolean
+    image?: boolean
     date?: boolean
     totalCapacity?: boolean
   }, ExtArgs["result"]["event"]>
@@ -3830,6 +3866,10 @@ export namespace Prisma {
   export type EventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    artist?: boolean
+    description?: boolean
+    venue?: boolean
+    image?: boolean
     date?: boolean
     totalCapacity?: boolean
   }, ExtArgs["result"]["event"]>
@@ -3837,11 +3877,15 @@ export namespace Prisma {
   export type EventSelectScalar = {
     id?: boolean
     name?: boolean
+    artist?: boolean
+    description?: boolean
+    venue?: boolean
+    image?: boolean
     date?: boolean
     totalCapacity?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "date" | "totalCapacity", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "artist" | "description" | "venue" | "image" | "date" | "totalCapacity", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tickets?: boolean | Event$ticketsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
@@ -3857,6 +3901,10 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      artist: string | null
+      description: string | null
+      venue: string | null
+      image: string | null
       date: Date
       totalCapacity: number
     }, ExtArgs["result"]["event"]>
@@ -4285,6 +4333,10 @@ export namespace Prisma {
   interface EventFieldRefs {
     readonly id: FieldRef<"Event", 'String'>
     readonly name: FieldRef<"Event", 'String'>
+    readonly artist: FieldRef<"Event", 'String'>
+    readonly description: FieldRef<"Event", 'String'>
+    readonly venue: FieldRef<"Event", 'String'>
+    readonly image: FieldRef<"Event", 'String'>
     readonly date: FieldRef<"Event", 'DateTime'>
     readonly totalCapacity: FieldRef<"Event", 'Int'>
   }
@@ -8012,6 +8064,10 @@ export namespace Prisma {
   export const EventScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    artist: 'artist',
+    description: 'description',
+    venue: 'venue',
+    image: 'image',
     date: 'date',
     totalCapacity: 'totalCapacity'
   };
@@ -8346,6 +8402,10 @@ export namespace Prisma {
     NOT?: EventWhereInput | EventWhereInput[]
     id?: StringFilter<"Event"> | string
     name?: StringFilter<"Event"> | string
+    artist?: StringNullableFilter<"Event"> | string | null
+    description?: StringNullableFilter<"Event"> | string | null
+    venue?: StringNullableFilter<"Event"> | string | null
+    image?: StringNullableFilter<"Event"> | string | null
     date?: DateTimeFilter<"Event"> | Date | string
     totalCapacity?: IntFilter<"Event"> | number
     tickets?: TicketListRelationFilter
@@ -8354,6 +8414,10 @@ export namespace Prisma {
   export type EventOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    artist?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    venue?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
     date?: SortOrder
     totalCapacity?: SortOrder
     tickets?: TicketOrderByRelationAggregateInput
@@ -8365,6 +8429,10 @@ export namespace Prisma {
     OR?: EventWhereInput[]
     NOT?: EventWhereInput | EventWhereInput[]
     name?: StringFilter<"Event"> | string
+    artist?: StringNullableFilter<"Event"> | string | null
+    description?: StringNullableFilter<"Event"> | string | null
+    venue?: StringNullableFilter<"Event"> | string | null
+    image?: StringNullableFilter<"Event"> | string | null
     date?: DateTimeFilter<"Event"> | Date | string
     totalCapacity?: IntFilter<"Event"> | number
     tickets?: TicketListRelationFilter
@@ -8373,6 +8441,10 @@ export namespace Prisma {
   export type EventOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    artist?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    venue?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
     date?: SortOrder
     totalCapacity?: SortOrder
     _count?: EventCountOrderByAggregateInput
@@ -8388,6 +8460,10 @@ export namespace Prisma {
     NOT?: EventScalarWhereWithAggregatesInput | EventScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Event"> | string
     name?: StringWithAggregatesFilter<"Event"> | string
+    artist?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    description?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    venue?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    image?: StringNullableWithAggregatesFilter<"Event"> | string | null
     date?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     totalCapacity?: IntWithAggregatesFilter<"Event"> | number
   }
@@ -8724,6 +8800,10 @@ export namespace Prisma {
   export type EventCreateInput = {
     id?: string
     name: string
+    artist?: string | null
+    description?: string | null
+    venue?: string | null
+    image?: string | null
     date: Date | string
     totalCapacity: number
     tickets?: TicketCreateNestedManyWithoutEventInput
@@ -8732,6 +8812,10 @@ export namespace Prisma {
   export type EventUncheckedCreateInput = {
     id?: string
     name: string
+    artist?: string | null
+    description?: string | null
+    venue?: string | null
+    image?: string | null
     date: Date | string
     totalCapacity: number
     tickets?: TicketUncheckedCreateNestedManyWithoutEventInput
@@ -8740,6 +8824,10 @@ export namespace Prisma {
   export type EventUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     totalCapacity?: IntFieldUpdateOperationsInput | number
     tickets?: TicketUpdateManyWithoutEventNestedInput
@@ -8748,6 +8836,10 @@ export namespace Prisma {
   export type EventUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     totalCapacity?: IntFieldUpdateOperationsInput | number
     tickets?: TicketUncheckedUpdateManyWithoutEventNestedInput
@@ -8756,6 +8848,10 @@ export namespace Prisma {
   export type EventCreateManyInput = {
     id?: string
     name: string
+    artist?: string | null
+    description?: string | null
+    venue?: string | null
+    image?: string | null
     date: Date | string
     totalCapacity: number
   }
@@ -8763,6 +8859,10 @@ export namespace Prisma {
   export type EventUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     totalCapacity?: IntFieldUpdateOperationsInput | number
   }
@@ -8770,6 +8870,10 @@ export namespace Prisma {
   export type EventUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     totalCapacity?: IntFieldUpdateOperationsInput | number
   }
@@ -9192,6 +9296,10 @@ export namespace Prisma {
   export type EventCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    artist?: SortOrder
+    description?: SortOrder
+    venue?: SortOrder
+    image?: SortOrder
     date?: SortOrder
     totalCapacity?: SortOrder
   }
@@ -9203,6 +9311,10 @@ export namespace Prisma {
   export type EventMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    artist?: SortOrder
+    description?: SortOrder
+    venue?: SortOrder
+    image?: SortOrder
     date?: SortOrder
     totalCapacity?: SortOrder
   }
@@ -9210,6 +9322,10 @@ export namespace Prisma {
   export type EventMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    artist?: SortOrder
+    description?: SortOrder
+    venue?: SortOrder
+    image?: SortOrder
     date?: SortOrder
     totalCapacity?: SortOrder
   }
@@ -10111,6 +10227,10 @@ export namespace Prisma {
   export type EventCreateWithoutTicketsInput = {
     id?: string
     name: string
+    artist?: string | null
+    description?: string | null
+    venue?: string | null
+    image?: string | null
     date: Date | string
     totalCapacity: number
   }
@@ -10118,6 +10238,10 @@ export namespace Prisma {
   export type EventUncheckedCreateWithoutTicketsInput = {
     id?: string
     name: string
+    artist?: string | null
+    description?: string | null
+    venue?: string | null
+    image?: string | null
     date: Date | string
     totalCapacity: number
   }
@@ -10162,6 +10286,10 @@ export namespace Prisma {
   export type EventUpdateWithoutTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     totalCapacity?: IntFieldUpdateOperationsInput | number
   }
@@ -10169,6 +10297,10 @@ export namespace Prisma {
   export type EventUncheckedUpdateWithoutTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     totalCapacity?: IntFieldUpdateOperationsInput | number
   }

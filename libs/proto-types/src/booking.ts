@@ -21,6 +21,10 @@ export interface CreateEventRequest {
   date: string;
   totalCapacity: number;
   basePrice: number;
+  artist: string;
+  description: string;
+  venue: string;
+  image: string;
 }
 
 export interface CreateEventResponse {
@@ -34,6 +38,10 @@ export interface EventSummary {
   name: string;
   date: string;
   availableTickets: number;
+  artist: string;
+  venue: string;
+  image: string;
+  totalCapacity: number;
 }
 
 export interface GetEventsResponse {

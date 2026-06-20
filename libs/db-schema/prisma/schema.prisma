@@ -37,6 +37,10 @@ enum Role {
  model Event {
    id            String   @id @default(uuid())
    name          String
+   artist        String?
+   description   String?
+   venue         String?
+   image         String?
    date          DateTime
    totalCapacity Int
    tickets       Ticket[]

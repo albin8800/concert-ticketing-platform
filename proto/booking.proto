@@ -24,6 +24,10 @@ message CreateEventRequest {
    string date = 2; // ISO 8601 string
    int32 totalCapacity = 3;
    double basePrice = 4;
+   string artist = 5;
+   string description = 6;
+   string venue = 7;
+   string image = 8;
 }
 
 message CreateEventResponse {
@@ -37,6 +41,10 @@ message EventSummary {
    string name = 2;
    string date = 3;
    int32 availableTickets = 4;
+   string artist = 5;
+   string venue = 6;
+   string image = 7;
+   int32 totalCapacity = 8;
 }
 
 message GetEventsResponse {

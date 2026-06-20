@@ -143,6 +143,10 @@ exports.Prisma.RefreshTokenScalarFieldEnum = {
 exports.Prisma.EventScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  artist: 'artist',
+  description: 'description',
+  venue: 'venue',
+  image: 'image',
   date: 'date',
   totalCapacity: 'totalCapacity'
 };
