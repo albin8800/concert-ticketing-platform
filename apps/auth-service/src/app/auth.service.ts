@@ -49,6 +49,7 @@ export class AuthService {
       return {
         message: 'Login successful',
         userId: user.id,
+        role: user.role,
         accessToken,
         refreshToken,
       }

@@ -30,6 +30,7 @@ export interface AuthResponse {
   userId: string;
   error: string;
   message: string;
+  role: string;
 }
 
 export interface ValidateRequest {

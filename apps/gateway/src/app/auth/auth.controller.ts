@@ -1,6 +1,8 @@
-import { Body, Controller, Inject, OnModuleInit, Post } from "@nestjs/common";
+import { Body, Controller, Inject, OnModuleInit, Post, Res } from "@nestjs/common";
 import { ClientGrpc } from "@nestjs/microservices";
 import { LoginDto, RefreshDto, RegisterDto } from "common";
+import { Response } from "express";
+import { lastValueFrom } from "rxjs";
 
 
 interface AuthServiceClient {
@@ -27,8 +29,17 @@ export class AuthController implements OnModuleInit {
     }
 
     @Post('login')
-    login(@Body() data: LoginDto) {
-        return this.authService.login(data);
+    async login(@Body() data: LoginDto, @Res({ passthrough: true }) res: Response) {
+        const response = await lastValueFrom(this.authService.login(data));
+        if (response.accessToken) {
+            res.cookie('accessToken', response.accessToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 24 * 60 * 60 * 1000 // 1 day
+            });
+        }
+        return response;
     }
 
     @Post('refresh')

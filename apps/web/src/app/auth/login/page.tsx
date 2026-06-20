@@ -44,13 +44,12 @@ export default function LoginPage() {
 
     try {
       const response = await api.post("/auth/login", formData);
-      
-      console.log("Login successful", response.data);
-      // Assuming the backend sends a token or sets a secure cookie.
-      // If it sends a token, you might want to store it in localStorage here:
-      // localStorage.setItem("accessToken", response.data.accessToken);
-
-      router.push("/dashboard");
+      console.log("Login successful");
+      let callbackUrl = searchParams.get("callbackUrl");
+      if (!callbackUrl) {
+        callbackUrl = response.data.role === 'ADMIN' ? "/admin" : "/dashboard";
+      }
+      router.push(callbackUrl);
     } catch (err: any) {
       if (err.response) {
         setError(err.response.data?.message || "Invalid email or password.");
