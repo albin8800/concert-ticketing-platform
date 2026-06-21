@@ -8,6 +8,8 @@ import {
   Inject,
   OnModuleInit,
   Req,
+  Delete,
+  Put,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
@@ -17,6 +19,8 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 // Define the gRPC interface so TypeScript knows what methods exist
 interface BookingService {
   CreateEvent(data: any): any;
+  DeleteEvent(data: any): any;
+  UpdateEvent(data: any): any;
   GetEvents(data: any): any;
   GetEventDetails(data: any): any;
   ReserveSeat(data: any): any;
@@ -86,4 +90,16 @@ export class BookingController implements OnModuleInit {
   async createEvent(@Body() body: any) {
     return lastValueFrom(this.bookingService.CreateEvent(body));
   }
+  @Delete('/admin/events/:id')
+  async deleteEvent(@Param('id') id: string) {
+    return lastValueFrom(this.bookingService.DeleteEvent({ eventId: id }))
+  }
+
+  @Put('admin/events/:id')
+    async updateEvent(@Param('id') id: string, @Body() body: any) {
+      return lastValueFrom(this.bookingService.UpdateEvent({
+        eventId: id,
+        ...body
+      }));
+    }
 }

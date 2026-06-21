@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Search, Filter, MoreHorizontal, Calendar, MapPin } from 'lucide-react';
+import { Plus, Search, Filter, MoreHorizontal, Calendar, MapPin, Edit, Trash2, BarChart } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import api from '@/lib/axios';
@@ -8,6 +8,7 @@ import api from '@/lib/axios';
 export default function ConcertsManagement() {
   const [events, setEvents] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchEvents() {
@@ -49,6 +50,8 @@ export default function ConcertsManagement() {
             type="text"
             className="block w-full pl-10 pr-3 py-2 border border-zinc-700 rounded-lg bg-zinc-900 text-zinc-50 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors sm:text-sm"
             placeholder="Search concerts by name or artist..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <button className="inline-flex items-center px-4 py-2 bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 text-zinc-300 text-sm font-medium rounded-lg transition-colors shadow-sm">
@@ -81,12 +84,20 @@ export default function ConcertsManagement() {
                   <td colSpan={6} className="px-6 py-8 text-center text-zinc-400">No concerts found. Add one to get started!</td>
                 </tr>
               ) : (
-                events.map((event) => {
-                  const eventDate = new Date(event.date);
-                  const ticketsSold = event.totalCapacity - event.availableTickets;
+                events
+                  .filter((event) => {
+                    const searchLower = searchQuery.toLowerCase();
+                    const matchesName = event.name?.toLowerCase().includes(searchLower) || false;
+                    const matchesArtist = event.artist?.toLowerCase().includes(searchLower) || false;
+                    return matchesName || matchesArtist;
+                  })
+                  .map((event) => {
+                    const eventDate = new Date(event.date);
+                    const ticketsSold = event.totalCapacity - event.availableTickets;
 
                   return (
                     <ConcertRow
+                      id={event.id}
                       key={event.id}
                       title={event.name}
                       artist={event.artist || 'Unknown Artist'}
@@ -110,7 +121,9 @@ export default function ConcertsManagement() {
   );
 }
 
-function ConcertRow({ title, artist, date, time, venue, city, sold, capacity, status, image }: any) {
+function ConcertRow({ id, title, artist, date, time, venue, city, sold, capacity, status, image }: any) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Upcoming': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
@@ -171,10 +184,47 @@ function ConcertRow({ title, artist, date, time, venue, city, sold, capacity, st
           {status}
         </span>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <button className="text-zinc-500 hover:text-emerald-400 p-2 rounded-md hover:bg-zinc-800 transition-colors">
+      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium relative">
+        <button 
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="text-zinc-500 hover:text-emerald-400 p-2 rounded-md hover:bg-zinc-800 transition-colors"
+        >
           <MoreHorizontal size={18} />
         </button>
+
+        {isMenuOpen && (
+          <div className="absolute right-8 top-10 w-48 bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl z-50 overflow-hidden flex flex-col text-left">
+            <Link 
+              href={`/admin/concerts/${id}/analytics`} 
+              className="px-4 py-3 flex items-center text-zinc-300 hover:bg-zinc-700 hover:text-white transition-colors"
+            >
+              <BarChart size={16} className="mr-3 text-blue-400" /> Analytics
+            </Link>
+            
+            <Link 
+              href={`/admin/concerts/${id}/edit`} 
+              className="px-4 py-3 flex items-center text-zinc-300 hover:bg-zinc-700 hover:text-white transition-colors border-t border-zinc-700/50"
+            >
+              <Edit size={16} className="mr-3 text-emerald-400" /> Edit Concert
+            </Link>
+            
+            <button 
+              onMouseDown={async () => {
+                if(window.confirm("Are you sure want to delete the concert")) {
+                  try {
+                    await api.delete(`/booking/admin/events/${id}`);
+                    window.location.reload();
+                  } catch (error) {
+                    alert("Failed to delete event")
+                  }
+                }
+              }}
+              className="w-full px-4 py-3 flex items-center text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors border-t border-zinc-700/50 text-left"
+            >
+              <Trash2 size={16} className="mr-3" /> Delete Concert
+            </button>
+          </div>
+        )}
       </td>
     </tr>
   );

@@ -36,6 +36,41 @@ export class AppService {
     return { event_id: event.id, message: 'Event and tickets created succesfully'};
   }
 
+  async deleteEvent(data: any) {
+    try {
+      await this.prisma.ticket.deleteMany({
+        where: { eventId: data.eventId }
+      })
+      await this.prisma.event.delete({
+        where: { id: data.eventId }
+      });
+      return { success: true, message: 'Event Deleted Succesfully' }
+    } catch (error) {
+      this.logger.error(error);
+      return { success: false, message: 'Failed to Delete Event'}
+    }
+  }
+
+  async updateEvent(data:any) {
+    try {
+      await this.prisma.event.update({
+        where: { id: data.eventId },
+        data: {
+          name: data.name,
+          artist: data.artist,
+          description: data.description,
+          venue: data.venue,
+          image: data.image,
+          date: data.date ? new Date(data.date) : undefined,
+        }
+      })
+      return { success: true, message: 'Event Updated Succesfully' }
+    } catch (error) {
+      this.logger.error(error)
+      return { success: false, message: 'Event Update Failed'}
+    }
+  }
+
   //Public Functions
   async getEvents() {
     const events = await this.prisma.event.findMany({

@@ -32,6 +32,30 @@ export interface CreateEventResponse {
   message: string;
 }
 
+export interface DeleteEventRequest {
+  eventId: string;
+}
+
+export interface DeleteEventResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface UpdateEventRequest {
+  eventId: string;
+  name: string;
+  artist: string;
+  description: string;
+  venue: string;
+  image: string;
+  date: string;
+}
+
+export interface UpdateEventResponse {
+  success: boolean;
+  message: string;
+}
+
 /** ----- Public: Fetch Events ----- */
 export interface EventSummary {
   id: string;
@@ -107,6 +131,10 @@ export interface BookingServiceClient {
 
   createEvent(request: CreateEventRequest): Observable<CreateEventResponse>;
 
+  deleteEvent(request: DeleteEventRequest): Observable<DeleteEventResponse>;
+
+  updateEvent(request: UpdateEventRequest): Observable<UpdateEventResponse>;
+
   /** Public Endpoints */
 
   getEvents(request: Empty): Observable<GetEventsResponse>;
@@ -126,6 +154,14 @@ export interface BookingServiceController {
   createEvent(
     request: CreateEventRequest,
   ): Promise<CreateEventResponse> | Observable<CreateEventResponse> | CreateEventResponse;
+
+  deleteEvent(
+    request: DeleteEventRequest,
+  ): Promise<DeleteEventResponse> | Observable<DeleteEventResponse> | DeleteEventResponse;
+
+  updateEvent(
+    request: UpdateEventRequest,
+  ): Promise<UpdateEventResponse> | Observable<UpdateEventResponse> | UpdateEventResponse;
 
   /** Public Endpoints */
 
@@ -148,7 +184,15 @@ export interface BookingServiceController {
 
 export function BookingServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createEvent", "getEvents", "getEventDetails", "reserveSeat", "confirmBooking"];
+    const grpcMethods: string[] = [
+      "createEvent",
+      "deleteEvent",
+      "updateEvent",
+      "getEvents",
+      "getEventDetails",
+      "reserveSeat",
+      "confirmBooking",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("BookingService", method)(constructor.prototype[method], method, descriptor);

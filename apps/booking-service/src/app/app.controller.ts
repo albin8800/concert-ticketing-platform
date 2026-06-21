@@ -10,6 +10,16 @@ export class AppController {
   createEvent(data: any) {
     return this.appService.createEvent(data);
   }
+
+  @GrpcMethod('BookingService', 'DeleteEvent')
+  deleteEvent(data:any) {
+    return this.appService.deleteEvent(data);
+  }
+
+  @GrpcMethod('BookingService', 'UpdateEvent')
+  updateEvent(data: any) {
+    return this.appService.updateEvent(data);
+  }
   
   @GrpcMethod('BookingService', 'GetEvents')
   getEvents(data: any) {
