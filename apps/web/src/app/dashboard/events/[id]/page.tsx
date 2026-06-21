@@ -110,7 +110,9 @@ export default function EventDetailsPage() {
            </div>
 
            <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
-             {event.seats?.map((seat: any) => {
+             {event.seats
+              ?.sort((a: any, b: any) => parseInt(a.seatNumber) - parseInt(b.seatNumber))
+             .map((seat: any) => {
                const isAvailable = seat.status === 'AVAILABLE';
                // Hardcoded selection of seat 18 for UI demonstration
                const isSelected = seat.id === selectedSeat; 

@@ -22,12 +22,54 @@ export default function AddConcert() {
     capacity: ''
   });
 
+  const [isUploading, setIsUploading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if(!file) return;
+
+    setIsUploading(true);
+
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
+        if (!cloudName || !uploadPreset) {
+          console.error("Cloudinary environment variables are missing!");
+          setIsUploading(false);
+          return;
+        }
+
+    const uploadData = new FormData();
+    uploadData.append("file", file);
+    uploadData.append('upload_preset', uploadPreset);
+
+    try {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+            method: "POST",
+            body: uploadData,
+          });
+
+          const data = await response.json();
+
+          if(data.secure_url) {
+            setImageUrl(data.secure_url);
+          } else {
+            console.error("upload failed", error);
+          } 
+    } catch (error) {
+      console.error("upload failed", error);
+    } finally {
+      setIsUploading(false);
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,8 +85,7 @@ export default function AddConcert() {
         artist: formData.artist,
         description: formData.description,
         venue: formData.venue,
-        // Using a placeholder image since we haven't implemented file uploading yet
-        image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=600&auto=format&fit=crop",
+        image: imageUrl || "",
         date: dateTime,
         totalCapacity: parseInt(formData.capacity, 10),
         basePrice: parseFloat(formData.basePrice)
@@ -147,16 +188,37 @@ export default function AddConcert() {
 
         {/* Sidebar Settings */}
         <div className="space-y-6">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-6">
-            <h2 className="text-lg font-semibold text-zinc-50">Concert Media</h2>
-            <div className="border-2 border-dashed border-zinc-700 rounded-xl p-8 flex flex-col items-center justify-center text-center hover:bg-zinc-800/50 hover:border-emerald-500/50 transition-colors cursor-pointer group">
-              <div className="h-12 w-12 bg-zinc-950 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                <ImageIcon size={24} className="text-emerald-500" />
-              </div>
-              <p className="text-sm font-medium text-zinc-300">Image Upload Disabled</p>
-              <p className="text-xs text-zinc-500 mt-1">Placeholder will be used.</p>
+           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-6">
+      <h2 className="text-lg font-semibold text-zinc-50">Concert Media</h2>
+
+      <label className="border-2 border-dashed border-zinc-700 rounded-xl p-8 flex flex-col items-center justify-center text-center hover:bg-zinc-800/50 hover:border-emerald-500/50 transition-colors cursor-pointer group relative overflow-hidden">
+
+        {/* Hidden file input */}
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageUpload}
+          disabled={isUploading}
+        />
+
+        {imageUrl ? (
+          // If we have an image, show a preview!
+          <img src={imageUrl} alt="Preview" className="absolute inset-0 w-full h-full object-cover opacity-80" />
+        ) : (
+          // If no image, show the upload icon
+          <>
+            <div className="h-12 w-12 bg-zinc-950 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <ImageIcon size={24} className="text-emerald-500" />
             </div>
-          </div>
+            <p className="text-sm font-medium text-zinc-300">
+              {isUploading ? "Uploading to cloud..." : "Click to upload poster"}
+            </p>
+            <p className="text-xs text-zinc-500 mt-1">SVG, PNG, JPG or GIF</p>
+          </>
+        )}
+      </label>
+    </div>
 
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 space-y-6">
             <h2 className="text-lg font-semibold text-zinc-50">Ticketing</h2>
