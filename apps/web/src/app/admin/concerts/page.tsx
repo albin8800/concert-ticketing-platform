@@ -1,7 +1,28 @@
+"use client";
+
 import { Plus, Search, Filter, MoreHorizontal, Calendar, MapPin } from 'lucide-react';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import api from '@/lib/axios';
 
 export default function ConcertsManagement() {
+  const [events, setEvents] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const response = await api.get('/booking/events');
+        setEvents(response.data.events || []);
+      } catch (err) {
+        console.error("Failed to load events", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchEvents();
+  }, []);
+
   return (
     <div className="space-y-6">
       {/* Header section */}
@@ -51,54 +72,38 @@ export default function ConcertsManagement() {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800">
-              <ConcertRow
-                title="The Weeknd - After Hours Tour"
-                artist="The Weeknd"
-                date="Oct 24, 2026"
-                time="20:00 PM"
-                venue="Madison Square Garden"
-                city="New York, NY"
-                sold="14,230"
-                capacity="19,500"
-                status="Upcoming"
-                image="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=200&auto=format&fit=crop"
-              />
-              <ConcertRow
-                title="Taylor Swift - Eras Tour"
-                artist="Taylor Swift"
-                date="Nov 12, 2026"
-                time="19:30 PM"
-                venue="Wembley Stadium"
-                city="London, UK"
-                sold="90,000"
-                capacity="90,000"
-                status="Sold Out"
-                image="https://images.unsplash.com/photo-1540039155732-61ee01b44b4b?q=80&w=200&auto=format&fit=crop"
-              />
-              <ConcertRow
-                title="Coldplay - Music of the Spheres"
-                artist="Coldplay"
-                date="Dec 05, 2026"
-                time="20:30 PM"
-                venue="Accor Arena"
-                city="Paris, FR"
-                sold="12,450"
-                capacity="20,000"
-                status="Upcoming"
-                image="https://images.unsplash.com/photo-1533174000222-35368a5c37fb?q=80&w=200&auto=format&fit=crop"
-              />
+              {isLoading ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-zinc-400">Loading events...</td>
+                </tr>
+              ) : events.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-zinc-400">No concerts found. Add one to get started!</td>
+                </tr>
+              ) : (
+                events.map((event) => {
+                  const eventDate = new Date(event.date);
+                  const ticketsSold = event.totalCapacity - event.availableTickets;
+
+                  return (
+                    <ConcertRow
+                      key={event.id}
+                      title={event.name}
+                      artist={event.artist || 'Unknown Artist'}
+                      date={eventDate.toLocaleDateString()}
+                      time={eventDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      venue={event.venue || 'Platform Venue'}
+                      city="Default City"
+                      sold={ticketsSold.toString()}
+                      capacity={event.totalCapacity?.toString() || '0'}
+                      status="Upcoming"
+                      image={event.image || "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=200&auto=format&fit=crop"}
+                    />
+                  )
+                })
+              )}
             </tbody>
           </table>
-        </div>
-        {/* Pagination placeholder */}
-        <div className="px-6 py-4 border-t border-zinc-800 flex items-center justify-between bg-zinc-900/50">
-          <span className="text-sm text-zinc-400">
-            Showing <span className="font-medium text-zinc-200">1</span> to <span className="font-medium text-zinc-200">3</span> of <span className="font-medium text-zinc-200">24</span> results
-          </span>
-          <div className="flex gap-2">
-            <button className="px-3 py-1 text-sm border border-zinc-700 rounded-md text-zinc-500 disabled:opacity-50" disabled>Previous</button>
-            <button className="px-3 py-1 text-sm border border-zinc-700 rounded-md text-zinc-300 hover:bg-zinc-800 transition-colors">Next</button>
-          </div>
         </div>
       </div>
     </div>
@@ -115,7 +120,8 @@ function ConcertRow({ title, artist, date, time, venue, city, sold, capacity, st
     }
   };
 
-  const percentageSold = Math.round((parseInt(sold.replace(/,/g, '')) / parseInt(capacity.replace(/,/g, ''))) * 100);
+  const cap = parseInt(capacity.replace(/,/g, ''));
+  const percentageSold = cap > 0 ? Math.round((parseInt(sold.replace(/,/g, '')) / cap) * 100) : 0;
 
   return (
     <tr className="hover:bg-zinc-800/50 transition-colors group">

@@ -14,15 +14,25 @@ export class JwtAuthGuard implements CanActivate, OnModuleInit {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const authHeader = request.headers['authorization'];
+    let token = null;
 
-    if (!authHeader) {
-      throw new UnauthorizedException('No authorization header found');
+    // 1. Try to get token from Authorization header
+    const authHeader = request.headers['authorization'];
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.split(' ')[1];
     }
 
-    const token = authHeader.split(' ')[1];
+    // 2. Try to get token from the HttpOnly cookie (since Next.js sends it via proxy)
+    if (!token && request.headers.cookie) {
+      const cookies = request.headers.cookie.split(';');
+      const accessCookie = cookies.find((c: string) => c.trim().startsWith('accessToken='));
+      if (accessCookie) {
+        token = accessCookie.split('=')[1];
+      }
+    }
+
     if (!token) {
-      throw new UnauthorizedException('No token found');
+      throw new UnauthorizedException('No token found in header or cookie');
     }
 
     try {

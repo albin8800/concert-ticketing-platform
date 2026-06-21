@@ -66,6 +66,10 @@ export interface GetEventDetailsResponse {
   name: string;
   date: string;
   seats: SeatDTO[];
+  artist: string;
+  description: string;
+  venue: string;
+  image: string;
 }
 
 /** ----- Transactions: Reservations & Booking ----- */

@@ -65,6 +65,10 @@ export class AppService {
       id: event?.id,
       name: event?.name,
       date: event?.date.toISOString(),
+      artist: event?.artist,
+      description: event?.description,
+      venue: event?.venue,
+      image: event?.image,
       seats: event?.tickets.map(t => ({
         id: t.id,
         seatNumber: t.seatNumber,

@@ -68,6 +68,10 @@ message GetEventDetailsResponse {
    string name = 2;
    string date = 3;
    repeated SeatDTO seats = 4;
+   string artist = 5;
+   string description = 6;
+   string venue = 7;
+   string image = 8;
 }
 
 // ----- Transactions: Reservations & Booking -----
