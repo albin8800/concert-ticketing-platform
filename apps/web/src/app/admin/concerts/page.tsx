@@ -9,6 +9,8 @@ export default function ConcertsManagement() {
   const [events, setEvents] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
     async function fetchEvents() {
@@ -54,10 +56,32 @@ export default function ConcertsManagement() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <button className="inline-flex items-center px-4 py-2 bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 text-zinc-300 text-sm font-medium rounded-lg transition-colors shadow-sm">
-          <Filter size={18} className="mr-2 text-zinc-400" />
-          Filters
-        </button>
+        <div className="relative">
+          <button 
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className="inline-flex items-center px-4 py-2 bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 text-zinc-300 text-sm font-medium rounded-lg transition-colors shadow-sm"
+          >
+            <Filter size={18} className="mr-2 text-zinc-400" />
+            Filter: {statusFilter}
+          </button>
+          
+          {isFilterOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl z-50 overflow-hidden flex flex-col text-left py-1">
+              {['All', 'Upcoming', 'Sold Out', 'Past'].map((status) => (
+                <button
+                  key={status}
+                  onClick={() => {
+                    setStatusFilter(status);
+                    setIsFilterOpen(false);
+                  }}
+                  className={`px-4 py-2 text-sm text-left hover:bg-zinc-700 transition-colors ${statusFilter === status ? 'text-emerald-400 font-medium' : 'text-zinc-300'}`}
+                >
+                  {status}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Concerts Table */}
@@ -85,11 +109,27 @@ export default function ConcertsManagement() {
                 </tr>
               ) : (
                 events
+                  .map(event => {
+                    // pre-compute status for filtering
+                    const eventDate = new Date(event.date);
+                    const now = new Date();
+                    let computedStatus = "Upcoming";
+                    if (eventDate < now) {
+                      computedStatus = "Past";
+                    } else if (event.availableTickets === 0) {
+                      computedStatus = "Sold Out";
+                    }
+                    return { ...event, computedStatus };
+                  })
                   .filter((event) => {
                     const searchLower = searchQuery.toLowerCase();
                     const matchesName = event.name?.toLowerCase().includes(searchLower) || false;
                     const matchesArtist = event.artist?.toLowerCase().includes(searchLower) || false;
-                    return matchesName || matchesArtist;
+                    const matchesSearch = matchesName || matchesArtist;
+                    
+                    const matchesStatus = statusFilter === "All" || event.computedStatus === statusFilter;
+                    
+                    return matchesSearch && matchesStatus;
                   })
                   .map((event) => {
                     const eventDate = new Date(event.date);
@@ -107,7 +147,7 @@ export default function ConcertsManagement() {
                       city="Default City"
                       sold={ticketsSold.toString()}
                       capacity={event.totalCapacity?.toString() || '0'}
-                      status="Upcoming"
+                      status={event.computedStatus}
                       image={event.image || "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=200&auto=format&fit=crop"}
                     />
                   )
