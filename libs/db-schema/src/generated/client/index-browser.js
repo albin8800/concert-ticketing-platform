@@ -140,6 +140,15 @@ exports.Prisma.RefreshTokenScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.VenueScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  location: 'location',
+  capacity: 'capacity',
+  type: 'type',
+  image: 'image'
+};
+
 exports.Prisma.EventScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -209,6 +218,7 @@ exports.Role = exports.$Enums.Role = {
 exports.Prisma.ModelName = {
   User: 'User',
   RefreshToken: 'RefreshToken',
+  Venue: 'Venue',
   Event: 'Event',
   Ticket: 'Ticket',
   Order: 'Order',

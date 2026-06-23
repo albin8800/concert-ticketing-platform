@@ -22,7 +22,7 @@ export class AppController {
   }
   
   @GrpcMethod('BookingService', 'GetEvents')
-  getEvents(data: any) {
+  getEvents() {
     return this.appService.getEvents();
   }
   
@@ -40,5 +40,25 @@ export class AppController {
   confirmBooking(data: any) {
     return this.appService.confirmBooking(data);
   }
-  
+
+  @GrpcMethod('BookingService', 'CreateVenue')
+  createVenue(data: any) {
+    return this.appService.createVenue(data);
+  }
+
+  @GrpcMethod('BookingService', 'GetVenues')
+  getVenues() {
+    return this.appService.getVenues();
+  }
+
+  @GrpcMethod('BookingService', 'DeleteVenue')
+  deleteVenue(data: any) {
+    return this.appService.deleteVenue(data);
+  }
+
+  @GrpcMethod('BookingService', 'UpdateVenue')
+  updateVenue(data: any) {
+    return this.appService.updateVenue(data);
+  }
+
 }

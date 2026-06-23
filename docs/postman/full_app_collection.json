@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6",
 		"name": "Concert Ticketing Platform - Full API",
-		"description": "Comprehensive collection for Auth, Booking, and Event services.",
+		"description": "Comprehensive collection for Auth, Booking, Event, and Venue services.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -171,7 +171,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"The Lumina Tour 2026\",\n  \"date\": \"2026-10-24T20:00:00Z\",\n  \"totalCapacity\": 100,\n  \"basePrice\": 65.00\n}",
+							"raw": "{\n  \"name\": \"The Lumina Tour 2026\",\n  \"date\": \"2026-10-24T20:00:00Z\",\n  \"totalCapacity\": 100,\n  \"basePrice\": 65.00,\n  \"artist\": \"Lumina\",\n  \"description\": \"A great concert\",\n  \"venue\": \"Madison Square Garden\",\n  \"image\": \"https://example.com/image.jpg\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -222,6 +222,87 @@
 							],
 							"path": [
 								"booking",
+								"events",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "INSERT_EVENT_ID_HERE"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Event (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"The Lumina Tour 2026 - Updated\",\n  \"artist\": \"Lumina Band\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking/admin/events/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"admin",
+								"events",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "INSERT_EVENT_ID_HERE"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Event (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/booking/admin/events/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"admin",
 								"events",
 								":id"
 							],
@@ -317,6 +398,159 @@
 							"path": [
 								"booking",
 								"checkout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "04. Venues (Admin)",
+			"item": [
+				{
+					"name": "Create Venue (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Madison Square Garden\",\n  \"location\": \"New York, NY\",\n  \"capacity\": 19500,\n  \"type\": \"Indoor Arena\",\n  \"image\": \"https://images.unsplash.com/photo-1540039155732-61ee01b44b4b?q=80&w=600&auto=format&fit=crop\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking/admin/venues",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"admin",
+								"venues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Venues (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/booking/admin/venues",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"admin",
+								"venues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Venue (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Madison Square Garden Updated\",\n  \"capacity\": 20000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/booking/admin/venues/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"admin",
+								"venues",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "INSERT_VENUE_ID_HERE"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Venue (Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/booking/admin/venues/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"booking",
+								"admin",
+								"venues",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "INSERT_VENUE_ID_HERE"
+								}
 							]
 						}
 					},

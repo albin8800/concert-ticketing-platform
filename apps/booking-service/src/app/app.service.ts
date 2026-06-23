@@ -13,6 +13,7 @@ export class AppService {
   }
 
   //Admin Functions
+  //Events
   async createEvent(data:any) {
     const event = await this.prisma.event.create({
       data: {
@@ -68,6 +69,61 @@ export class AppService {
     } catch (error) {
       this.logger.error(error)
       return { success: false, message: 'Event Update Failed'}
+    }
+  }
+
+  //Venue
+  async createVenue(data:any) {
+    try {
+      const venue = await this.prisma.venue.create({
+        data: {
+          name: data.name,
+          location: data.location,
+          capacity: data.capacity,
+          type: data.type,
+          image: data.image
+        }
+      });
+      return { success: true, venueId: venue.id, message: 'Venue created Succesfully'}
+    } catch (error) {
+      this.logger.error(error);
+      return { success: false, message: 'Failed to create venue' };
+    }
+  }
+
+  async getVenues() {
+    const venues = await this.prisma.venue.findMany();
+    return { venues };
+  }
+
+  async deleteVenue(data: any) {
+    try {
+      await this.prisma.venue.delete({
+        where: { id: data.venueId}
+      });
+      return { success: true, message: 'Venue deleted Succesfully' };
+    } catch (error) {
+      this.logger.error(error);
+      return { success: false, message: 'Failed to Delete Venue' };
+    }
+  }
+
+  async updateVenue(data: any) {
+    try {
+      await this.prisma.venue.update({
+        where: { id: data.venueId },
+        data: {
+          name: data.name,
+          location: data.location,
+          capacity: data.capacity,
+          type: data.type,
+          image: data.image
+        }
+      });
+      return { success: true, message: 'Venue Updated Succesfully' };
+    } catch (error) {
+      this.logger.error(error);
+      return { success: false, message: 'Failed to Update Venue'}
     }
   }
 

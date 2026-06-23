@@ -8,6 +8,12 @@ service BookingService {
    rpc DeleteEvent (DeleteEventRequest) returns (DeleteEventResponse);
    rpc UpdateEvent (UpdateEventRequest) returns (UpdateEventResponse);
 
+   // Venue Endpoints
+   rpc CreateVenue (CreateVenueRequest) returns (CreateVenueResponse);
+   rpc GetVenues (Empty) returns (GetVenuesResponse);
+   rpc DeleteVenue (DeleteVenueRequest) returns (DeleteVenueResponse);
+   rpc UpdateVenue (UpdateVenueRequest) returns (UpdateVenueResponse);
+
    // Public Endpoints
    rpc GetEvents (Empty) returns (GetEventsResponse);
    rpc GetEventDetails (GetEventDetailsRequest) returns (GetEventDetailsResponse);
@@ -57,6 +63,57 @@ message UpdateEventRequest {
 }
 
 message UpdateEventResponse {
+   bool success = 1;
+   string message = 2;
+}
+
+// -----Admin: Venue -----
+message CreateVenueRequest {
+   string name = 1;
+   string location = 2;
+   int32 capacity = 3;
+   string type = 4;
+   string image = 5;
+}
+
+message CreateVenueResponse {
+   bool success = 1;
+   string venueId = 2;
+   string message = 3;
+}
+
+message VenueDTO {
+   string id = 1;
+   string name = 2;
+   string location = 3;
+   int32 capacity = 4;
+   string type = 5;
+   string image = 6;
+}
+
+message GetVenuesResponse {
+   repeated VenueDTO venues = 1;
+}
+
+message DeleteVenueRequest {
+   string venueId = 1;
+}
+
+message DeleteVenueResponse {
+   bool success = 1;
+   string message = 2;
+}
+
+message UpdateVenueRequest {
+   string venueId = 1;
+   string name = 2;
+   string location = 3;
+   int32 capacity = 4;
+   string type = 5;
+   string image = 6;
+}
+
+message UpdateVenueResponse {
    bool success = 1;
    string message = 2;
 }

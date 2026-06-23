@@ -35,6 +35,15 @@ model RefreshToken {
   createdAt DateTime @default(now())
 }
 
+model Venue {
+  id       String  @id @default(uuid())
+  name     String
+  location String
+  capacity Int
+  type     String
+  image    String?
+}
+
 model Event {
   id            String   @id @default(uuid())
   name          String

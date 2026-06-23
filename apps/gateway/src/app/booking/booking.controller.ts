@@ -25,6 +25,10 @@ interface BookingService {
   GetEventDetails(data: any): any;
   ReserveSeat(data: any): any;
   ConfirmBooking(data: any): any;
+  CreateVenue(data: any): any;
+  GetVenues(data: any): any;
+  DeleteVenue(data: any): any;
+  UpdateVenue(data: any): any;
 }
 
 @Controller('booking')
@@ -102,4 +106,28 @@ export class BookingController implements OnModuleInit {
         ...body
       }));
     }
+  
+  @Post('/admin/venues')
+  async createVenue(@Body() body: any) {
+    return lastValueFrom(this.bookingService.CreateVenue(body));
+  }
+  
+  @Get('/admin/venues')
+  async getVenues() {
+    return lastValueFrom(this.bookingService.GetVenues({}));
+  }
+  
+  @Delete('/admin/venues/:id')
+  async deleteVenue(@Param('id') id: string) {
+    return lastValueFrom(this.bookingService.DeleteVenue({ venueId: id }));
+  }
+
+  @Put('/admin/venues/:id')
+  async updateVenue(@Param('id') id: string, @Body() body: any) {
+    return lastValueFrom(this.bookingService.UpdateVenue({ 
+      venueId: id,
+      ...body
+    }));
+  }
+
 }

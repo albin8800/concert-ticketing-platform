@@ -56,6 +56,57 @@ export interface UpdateEventResponse {
   message: string;
 }
 
+/** -----Admin: Venue ----- */
+export interface CreateVenueRequest {
+  name: string;
+  location: string;
+  capacity: number;
+  type: string;
+  image: string;
+}
+
+export interface CreateVenueResponse {
+  success: boolean;
+  venueId: string;
+  message: string;
+}
+
+export interface VenueDTO {
+  id: string;
+  name: string;
+  location: string;
+  capacity: number;
+  type: string;
+  image: string;
+}
+
+export interface GetVenuesResponse {
+  venues: VenueDTO[];
+}
+
+export interface DeleteVenueRequest {
+  venueId: string;
+}
+
+export interface DeleteVenueResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface UpdateVenueRequest {
+  venueId: string;
+  name: string;
+  location: string;
+  capacity: number;
+  type: string;
+  image: string;
+}
+
+export interface UpdateVenueResponse {
+  success: boolean;
+  message: string;
+}
+
 /** ----- Public: Fetch Events ----- */
 export interface EventSummary {
   id: string;
@@ -135,6 +186,16 @@ export interface BookingServiceClient {
 
   updateEvent(request: UpdateEventRequest): Observable<UpdateEventResponse>;
 
+  /** Venue Endpoints */
+
+  createVenue(request: CreateVenueRequest): Observable<CreateVenueResponse>;
+
+  getVenues(request: Empty): Observable<GetVenuesResponse>;
+
+  deleteVenue(request: DeleteVenueRequest): Observable<DeleteVenueResponse>;
+
+  updateVenue(request: UpdateVenueRequest): Observable<UpdateVenueResponse>;
+
   /** Public Endpoints */
 
   getEvents(request: Empty): Observable<GetEventsResponse>;
@@ -163,6 +224,22 @@ export interface BookingServiceController {
     request: UpdateEventRequest,
   ): Promise<UpdateEventResponse> | Observable<UpdateEventResponse> | UpdateEventResponse;
 
+  /** Venue Endpoints */
+
+  createVenue(
+    request: CreateVenueRequest,
+  ): Promise<CreateVenueResponse> | Observable<CreateVenueResponse> | CreateVenueResponse;
+
+  getVenues(request: Empty): Promise<GetVenuesResponse> | Observable<GetVenuesResponse> | GetVenuesResponse;
+
+  deleteVenue(
+    request: DeleteVenueRequest,
+  ): Promise<DeleteVenueResponse> | Observable<DeleteVenueResponse> | DeleteVenueResponse;
+
+  updateVenue(
+    request: UpdateVenueRequest,
+  ): Promise<UpdateVenueResponse> | Observable<UpdateVenueResponse> | UpdateVenueResponse;
+
   /** Public Endpoints */
 
   getEvents(request: Empty): Promise<GetEventsResponse> | Observable<GetEventsResponse> | GetEventsResponse;
@@ -188,6 +265,10 @@ export function BookingServiceControllerMethods() {
       "createEvent",
       "deleteEvent",
       "updateEvent",
+      "createVenue",
+      "getVenues",
+      "deleteVenue",
+      "updateVenue",
       "getEvents",
       "getEventDetails",
       "reserveSeat",

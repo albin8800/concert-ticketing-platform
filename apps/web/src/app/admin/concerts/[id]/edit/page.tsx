@@ -27,6 +27,7 @@ export default function EditConcert() {
 
   const [isUploading, setIsUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [venues, setVenues] = useState<any[]>([]);
 
   
   useEffect(() => {
@@ -57,7 +58,21 @@ export default function EditConcert() {
         setIsFetching(false);
       }
     }
-    if (id) loadEvent();
+    }
+    
+    async function loadVenues() {
+      try {
+        const response = await api.get('/booking/admin/venues');
+        setVenues(response.data.venues || []);
+      } catch (err) {
+        console.error("Failed to load venues", err);
+      }
+    }
+
+    if (id) {
+      loadEvent();
+      loadVenues();
+    }
   }, [id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -220,9 +235,9 @@ export default function EditConcert() {
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><MapPin size={18} className="text-zinc-500" /></div>
                   <select required name="venue" value={formData.venue} onChange={handleChange} className="w-full bg-zinc-950 border border-zinc-800 rounded-lg pl-10 pr-4 py-2.5 text-zinc-50 appearance-none focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors">
                     <option value="" disabled>Select a venue...</option>
-                    <option value="msg">Madison Square Garden, NY</option>
-                    <option value="wembley">Wembley Stadium, London</option>
-                    <option value="accor">Accor Arena, Paris</option>
+                    {venues.map((v) => (
+                      <option key={v.id} value={v.name}>{v.name}, {v.location}</option>
+                    ))}
                   </select>
                 </div>
               </div>
