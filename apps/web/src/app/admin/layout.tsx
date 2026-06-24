@@ -1,4 +1,6 @@
+"use client";
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
   Ticket,
@@ -27,7 +29,7 @@ export default function AdminLayout({
           </span>
         </div>
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-          <NavItem href="/admin" icon={<LayoutDashboard size={20} />} label="Dashboard" active />
+          <NavItem href="/admin" icon={<LayoutDashboard size={20} />} label="Dashboard" />
           <NavItem href="/admin/concerts" icon={<Ticket size={20} />} label="Concerts" />
           <NavItem href="/admin/venues" icon={<MapPin size={20} />} label="Venues" />
           <NavItem href="/admin/bookings" icon={<CreditCard size={20} />} label="Bookings" />
@@ -85,7 +87,10 @@ export default function AdminLayout({
   );
 }
 
-function NavItem({ href, icon, label, active = false }: { href: string; icon: React.ReactNode; label: string; active?: boolean }) {
+function NavItem({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
+  const pathname = usePathname();
+  const active = pathname === href || (href !== '/admin' && pathname.startsWith(href));
+
   return (
     <Link href={href}>
       <span

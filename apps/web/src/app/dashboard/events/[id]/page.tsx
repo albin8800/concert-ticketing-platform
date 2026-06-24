@@ -40,7 +40,7 @@ export default function EventDetailsPage() {
         ticketId: selectedSeat
       });
       alert('Seat Reserved for 10 Minutes'+ response.data.message);
-      router.push('/dashboard/events')
+      router.push(`/dashboard/checkout/${selectedSeat}`);
     } catch (error: any) {
       console.error('Error in Reserving', error);
     } finally {

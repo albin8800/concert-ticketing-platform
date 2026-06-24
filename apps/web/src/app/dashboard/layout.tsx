@@ -40,7 +40,7 @@ export default function DashboardLayout({
         
         <nav className="flex-1 py-6 px-4 space-y-1">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
             return (
               <Link
                 key={item.name}

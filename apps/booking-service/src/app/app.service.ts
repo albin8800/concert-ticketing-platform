@@ -152,6 +152,31 @@ export class AppService {
       where: { id: eventId},
       include: { tickets: true },
     });
+
+    if (event) {
+      // Lazy cleanup of expired reservations
+      const reservedTickets = event.tickets.filter(t => t.status === 'RESERVED');
+      if (reservedTickets.length > 0) {
+        const keys = reservedTickets.map(t => `ticket:${t.id}`);
+        const holders = await this.redis.mget(...keys);
+        
+        const expiredTicketIds = reservedTickets
+          .filter((_, index) => holders[index] === null)
+          .map(t => t.id);
+
+        if (expiredTicketIds.length > 0) {
+          await this.prisma.ticket.updateMany({
+            where: { id: { in: expiredTicketIds } },
+            data: { status: 'AVAILABLE' }
+          });
+          
+          event.tickets = event.tickets.map(t => 
+            expiredTicketIds.includes(t.id) ? { ...t, status: 'AVAILABLE' } : t
+          );
+        }
+      }
+    }
+
     return {
       id: event?.id,
       name: event?.name,
